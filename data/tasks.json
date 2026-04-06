@@ -1,0 +1,13 @@
+{
+    "leak_detection_easy": {
+      "transactions": [
+        {"amount": 250, "category": "food", "time": "23:30"},
+        {"amount": 300, "category": "food", "time": "22:45"}
+      ],
+      "subscriptions": [
+        {"name": "Netflix", "used": true, "cost": 499},
+        {"name": "Gym", "used": false, "cost": 999}
+      ],
+      "goal": null
+    }
+  }

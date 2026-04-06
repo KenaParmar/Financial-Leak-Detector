@@ -1,0 +1,40 @@
+# 🔐 Secrets
+.env
+.env.*
+*.env
+
+# 🐍 Python
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+#  macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# Build / cache
+build/
+dist/
+*.egg-info/
+
+# Testing
+.pytest_cache/
+.coverage
+
+
+#  ML models
+*.pt
+*.pth
+*.h5
+models/
+checkpoints/
+
+# Logs
+*.log
