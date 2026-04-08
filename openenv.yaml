@@ -1,0 +1,56 @@
+name: financial_leak_env
+description: >
+  An AI-powered financial decision environment that detects spending leaks,
+  analyzes behavioral patterns, predicts future expenses, and optimizes savings.
+
+version: 1.0
+
+entry_point: api.app:app
+
+tasks:
+  - id: leak_detection_easy
+    description: Detect unused subscriptions and basic spending leaks
+  - id: duplicate_charge_easy
+    description: Identify duplicate transactions
+  - id: micro_spending_easy
+    description: Detect excessive small repeated expenses
+
+  - id: behavior_analysis_medium
+    description: Identify behavioral spending patterns
+  - id: weekend_spending_medium
+    description: Detect weekend-based overspending
+  - id: subscription_overlap_medium
+    description: Identify redundant subscriptions
+
+  - id: goal_optimization_hard
+    description: Optimize spending to meet savings goal
+  - id: tight_budget_hard
+    description: Manage spending under tight constraints
+  - id: multi_goal_hard
+    description: Optimize across multiple financial goals
+
+observation_space:
+  type: object
+  properties:
+    transactions:
+      type: array
+    subscriptions:
+      type: array
+    spending_summary:
+      type: object
+    user_goal:
+      type: object
+    current_month:
+      type: integer
+
+action_space:
+  type: object
+  properties:
+    cancel_subscriptions:
+      type: array
+    reduce_categories:
+      type: object
+    insights:
+      type: array
+
+reward_range: [0.0, 1.0]

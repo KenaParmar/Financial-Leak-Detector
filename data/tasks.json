@@ -1,13 +1,108 @@
 {
-    "leak_detection_easy": {
-      "transactions": [
-        {"amount": 250, "category": "food", "time": "23:30"},
-        {"amount": 300, "category": "food", "time": "22:45"}
-      ],
-      "subscriptions": [
-        {"name": "Netflix", "used": true, "cost": 499},
-        {"name": "Gym", "used": false, "cost": 999}
-      ],
-      "goal": null
+  "leak_detection_easy": {
+    "transactions": [
+      {"amount": 250, "category": "food", "time": "23:30"},
+      {"amount": 300, "category": "food", "time": "22:45"}
+    ],
+    "subscriptions": [
+      {"name": "Netflix", "used": true, "cost": 499},
+      {"name": "Gym", "used": false, "cost": 999}
+    ],
+    "goal": null
+  },
+
+  "duplicate_charge_easy": {
+    "transactions": [
+      {"amount": 199, "category": "subscription", "time": "10:00"},
+      {"amount": 199, "category": "subscription", "time": "10:01"}
+    ],
+    "subscriptions": [],
+    "goal": null
+  },
+
+  "micro_spending_easy": {
+    "transactions": [
+      {"amount": 50, "category": "snacks", "time": "12:00"},
+      {"amount": 60, "category": "snacks", "time": "16:00"},
+      {"amount": 70, "category": "snacks", "time": "20:00"}
+    ],
+    "subscriptions": [],
+    "goal": null
+  },
+
+  "behavior_analysis_medium": {
+    "transactions": [
+      {"amount": 400, "category": "food", "time": "23:10"},
+      {"amount": 500, "category": "food", "time": "23:50"},
+      {"amount": 600, "category": "food", "time": "21:30"}
+    ],
+    "subscriptions": [
+      {"name": "Spotify", "used": true, "cost": 119}
+    ],
+    "goal": null
+  },
+
+  "weekend_spending_medium": {
+    "transactions": [
+      {"amount": 1500, "category": "entertainment", "time": "Saturday 20:00"},
+      {"amount": 1200, "category": "food", "time": "Sunday 21:00"}
+    ],
+    "subscriptions": [],
+    "goal": null
+  },
+
+  "subscription_overlap_medium": {
+    "transactions": [],
+    "subscriptions": [
+      {"name": "Netflix", "used": true, "cost": 499},
+      {"name": "Amazon Prime", "used": true, "cost": 1499}
+    ],
+    "goal": null
+  },
+
+  "goal_optimization_hard": {
+    "transactions": [
+      {"amount": 500, "category": "food", "time": "22:00"},
+      {"amount": 2000, "category": "shopping", "time": "18:00"}
+    ],
+    "subscriptions": [
+      {"name": "Netflix", "used": true, "cost": 499},
+      {"name": "Gym", "used": false, "cost": 999}
+    ],
+    "goal": {
+      "target": 10000,
+      "months": 2
+    }
+  },
+
+  "tight_budget_hard": {
+    "transactions": [
+      {"amount": 3000, "category": "rent", "time": "1st"},
+      {"amount": 1500, "category": "food", "time": "daily"},
+      {"amount": 800, "category": "transport", "time": "weekly"}
+    ],
+    "subscriptions": [
+      {"name": "Spotify", "used": true, "cost": 119},
+      {"name": "Gym", "used": false, "cost": 999}
+    ],
+    "goal": {
+      "target": 5000,
+      "months": 1
+    }
+  },
+
+  "multi_goal_hard": {
+    "transactions": [
+      {"amount": 1000, "category": "food", "time": "daily"},
+      {"amount": 3000, "category": "shopping", "time": "weekend"}
+    ],
+    "subscriptions": [
+      {"name": "Netflix", "used": true, "cost": 499},
+      {"name": "Gym", "used": false, "cost": 999}
+    ],
+    "goal": {
+      "target": 15000,
+      "months": 3
     }
   }
+}
