@@ -1,0 +1,14 @@
+[project]
+name = "financial-leak-env"
+version = "0.1.0"
+description = "OpenEnv Financial Leak Detection Environment"
+authors = [
+    { name="Kena Parmar" }
+]
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "pydantic",
+    "openai",
+    "python-dotenv"
+]
