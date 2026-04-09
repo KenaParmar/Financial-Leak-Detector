@@ -7,10 +7,18 @@ from env.models import Action
 
 load_dotenv()
 
-client = OpenAI(
-    base_url=os.getenv("API_BASE_URL"),
-    api_key=os.getenv("OPENAI_API_KEY")
-)
+client = None
+
+API_KEY = os.getenv("OPENAI_API_KEY")
+
+if API_KEY:
+    try:
+        client = OpenAI(
+            base_url=os.getenv("API_BASE_URL"),
+            api_key=API_KEY
+        )
+    except Exception:
+        client = None
 
 MODEL_NAME = os.getenv("MODEL_NAME", "gpt-4o-mini")
 BENCHMARK = "financial_leak_env"
@@ -56,14 +64,17 @@ def run_task(task_id):
 
             # 🔹 API call (safe)
             try:
-                response = client.chat.completions.create(
-                    model=MODEL_NAME,
-                    messages=[
-                        {"role": "system", "content": "You are a financial assistant."},
-                        {"role": "user", "content": str(obs.model_dump())}
-                    ]
-                )
-                _ = response.choices[0].message.content
+                if client is not None:
+                    response = client.chat.completions.create(
+                        model=MODEL_NAME,
+                        messages=[
+                            {"role": "system", "content": "You are a financial assistant."},
+                            {"role": "user", "content": str(obs.model_dump())}
+                        ]
+                    )
+                    _ = response.choices[0].message.content
+                else:
+                    raise Exception("no_client")
 
             except Exception:
                 error = "api_error"
