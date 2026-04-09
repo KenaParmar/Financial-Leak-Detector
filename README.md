@@ -11,7 +11,6 @@ Most people don’t truly understand where their money goes.
 
 Existing finance apps only **track expenses** — they don’t **analyze, predict, or guide decisions**.
 
----
 
 ## Our Solution
 
@@ -24,7 +23,7 @@ We built an **AI-powered Financial Decision Environment** using OpenEnv that:
 
 This is not a static tool — it is a **multi-step learning environment** where an AI agent continuously improves financial decisions over time.
 
----
+
 
 ## Environment Overview
 
@@ -36,7 +35,7 @@ This is not a static tool — it is a **multi-step learning environment** where 
 4. Reward + task score returned
 5. Loop continues
 
----
+
 
 ## Observation Space
 
@@ -48,7 +47,7 @@ Each step provides structured financial data:
 * **User Goal**
 * **Time progression (month)**
 
----
+
 
 ## Action Space
 
@@ -68,7 +67,7 @@ Example:
 }
 ```
 
----
+
 
 ## Reward Function
 
@@ -81,7 +80,7 @@ The reward is **dense and meaningful**, capturing real-world financial reasoning
 
 Encourages **progressive improvement**, not just final success.
 
----
+
 
 ## Task Design (9 Tasks)
 
@@ -105,7 +104,7 @@ We designed **multi-difficulty tasks** to simulate real-world complexity:
 * `tight_budget_hard`
 * `multi_goal_hard`
 
----
+
 
 ## Graders (Strict Scoring)
 
@@ -120,7 +119,7 @@ Each task has a **deterministic grader**:
 
 Ensures fair and consistent evaluation.
 
----
+
 
 ## Baseline Agent
 
@@ -131,7 +130,7 @@ We provide a **deterministic baseline agent**:
 * Produces reproducible results
 * Logs in strict evaluation format
 
----
+
 
 ## Example Output
 
@@ -142,7 +141,7 @@ We provide a **deterministic baseline agent**:
 [END] success=true steps=5 score=0.990 rewards=0.80,0.80,0.80,0.80,0.80
 ```
 
----
+
 
 ## Running Locally
 
@@ -164,7 +163,7 @@ docker run -p 7860:7860 financial-env
 http://localhost:7860/docs
 ```
 
----
+
 
 ## Run Inference
 
@@ -172,7 +171,7 @@ http://localhost:7860/docs
 python inference.py
 ```
 
----
+
 
 ## Deployment
 
@@ -182,7 +181,7 @@ Deployed using **Hugging Face Spaces (Docker)**
 * OpenEnv compliant
 * Ready for automated evaluation
 
----
+
 
 ## OpenEnv Compliance
 
@@ -194,7 +193,7 @@ Deployed using **Hugging Face Spaces (Docker)**
 * ✔ Baseline inference script
 * ✔ Dockerized + deployable
 
----
+
 
 ## Why This Project Stands Out
 
@@ -204,7 +203,7 @@ Deployed using **Hugging Face Spaces (Docker)**
 * Explainable outputs (insights + plans)
 * Strong reward shaping and grading system
 
----
+
 
 ## Future Improvements
 
@@ -213,10 +212,10 @@ Deployed using **Hugging Face Spaces (Docker)**
 * Real-time transaction integration
 * Multi-user collaborative insights
 
----
+
 
 ## Author
 
 Built as part of an OpenEnv challenge to design realistic AI environments.
 
----
+
