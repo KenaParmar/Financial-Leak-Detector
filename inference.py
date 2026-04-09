@@ -7,20 +7,20 @@ from env.models import Action
 
 load_dotenv()
 
-client = None
+# ✅ REQUIRED ENV VARIABLES (with defaults)
+API_BASE_URL = os.getenv("API_BASE_URL", "https://api.openai.com/v1")
+MODEL_NAME = os.getenv("MODEL_NAME", "gpt-4.1-mini")
 
-API_KEY = os.getenv("OPENAI_API_KEY")
+HF_TOKEN = os.getenv("HF_TOKEN")
+if HF_TOKEN is None:
+    raise ValueError("HF_TOKEN environment variable is required")
 
-if API_KEY:
-    try:
-        client = OpenAI(
-            base_url=os.getenv("API_BASE_URL"),
-            api_key=API_KEY
-        )
-    except Exception:
-        client = None
+# ✅ CORRECT CLIENT (MANDATORY)
+client = OpenAI(
+    base_url=API_BASE_URL,
+    api_key=HF_TOKEN
+)
 
-MODEL_NAME = os.getenv("MODEL_NAME", "gpt-4o-mini")
 BENCHMARK = "financial_leak_env"
 MAX_STEPS = 5
 
@@ -63,18 +63,16 @@ def run_task(task_id):
             error = None
 
             # 🔹 API call (safe)
+
             try:
-                if client is not None:
-                    response = client.chat.completions.create(
-                        model=MODEL_NAME,
-                        messages=[
-                            {"role": "system", "content": "You are a financial assistant."},
-                            {"role": "user", "content": str(obs.model_dump())}
-                        ]
-                    )
-                    _ = response.choices[0].message.content
-                else:
-                    raise Exception("no_client")
+                response = client.chat.completions.create(
+                    model=MODEL_NAME,
+                    messages=[
+                        {"role": "system", "content": "You are a financial assistant."},
+                        {"role": "user", "content": str(obs.model_dump())}
+                    ]
+                )
+                _ = response.choices[0].message.content
 
             except Exception:
                 error = "api_error"
