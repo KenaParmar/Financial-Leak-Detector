@@ -1,108 +1,202 @@
 {
   "leak_detection_easy": {
-    "transactions": [
-      {"amount": 250, "category": "food", "time": "23:30"},
-      {"amount": 300, "category": "food", "time": "22:45"}
-    ],
+    "goal": {
+      "objective": "Identify and cancel unused subscriptions to stop money leaks.",
+      "target_savings": 50,
+      "difficulty": "easy"
+    },
     "subscriptions": [
-      {"name": "Netflix", "used": true, "cost": 499},
-      {"name": "Gym", "used": false, "cost": 999}
+      { "name": "Gym",       "amount": 30, "used": false },
+      { "name": "Netflix",   "amount": 15, "used": true  },
+      { "name": "Spotify",   "amount": 10, "used": true  },
+      { "name": "MagazineX", "amount": 12, "used": false }
     ],
-    "goal": null
+    "transactions": [
+      { "id": "t1",  "category": "food",          "amount": 320, "description": "Groceries",        "time_of_day": "morning" },
+      { "id": "t2",  "category": "food",          "amount": 85,  "description": "Late night snacks", "time_of_day": "night"   },
+      { "id": "t3",  "category": "entertainment", "amount": 60,  "description": "Movie tickets",     "time_of_day": "evening" },
+      { "id": "t4",  "category": "transport",     "amount": 110, "description": "Uber rides",        "time_of_day": "night"   },
+      { "id": "t5",  "category": "utilities",     "amount": 90,  "description": "Electric bill",     "time_of_day": "morning" }
+    ]
   },
 
   "duplicate_charge_easy": {
-    "transactions": [
-      {"amount": 199, "category": "subscription", "time": "10:00"},
-      {"amount": 199, "category": "subscription", "time": "10:01"}
+    "goal": {
+      "objective": "Detect and flag duplicate or near-duplicate charges within the same month.",
+      "target_savings": 40,
+      "difficulty": "easy"
+    },
+    "subscriptions": [
+      { "name": "Adobe",     "amount": 55, "used": true  },
+      { "name": "AdobeCC",   "amount": 55, "used": false },
+      { "name": "Dropbox",   "amount": 10, "used": true  }
     ],
-    "subscriptions": [],
-    "goal": null
+    "transactions": [
+      { "id": "t1", "category": "software",   "amount": 55,  "description": "Adobe Creative Cloud - invoice #1001", "time_of_day": "morning" },
+      { "id": "t2", "category": "software",   "amount": 55,  "description": "Adobe Creative Cloud - invoice #1001", "time_of_day": "morning" },
+      { "id": "t3", "category": "food",       "amount": 200, "description": "Grocery store",                        "time_of_day": "afternoon"},
+      { "id": "t4", "category": "food",       "amount": 200, "description": "Grocery store",                        "time_of_day": "afternoon"},
+      { "id": "t5", "category": "transport",  "amount": 60,  "description": "Monthly bus pass",                     "time_of_day": "morning" }
+    ]
   },
 
   "micro_spending_easy": {
-    "transactions": [
-      {"amount": 50, "category": "snacks", "time": "12:00"},
-      {"amount": 60, "category": "snacks", "time": "16:00"},
-      {"amount": 70, "category": "snacks", "time": "20:00"}
+    "goal": {
+      "objective": "Identify death-by-a-thousand-cuts micro-transactions draining the budget.",
+      "target_savings": 60,
+      "difficulty": "easy"
+    },
+    "subscriptions": [
+      { "name": "GamePass",  "amount": 15, "used": true  },
+      { "name": "NewsDaily", "amount": 8,  "used": false },
+      { "name": "PodcastPro","amount": 6,  "used": false }
     ],
-    "subscriptions": [],
-    "goal": null
+    "transactions": [
+      { "id": "t1",  "category": "food",          "amount": 4.5,  "description": "Coffee shop",       "time_of_day": "morning" },
+      { "id": "t2",  "category": "food",          "amount": 3.8,  "description": "Coffee shop",       "time_of_day": "morning" },
+      { "id": "t3",  "category": "food",          "amount": 5.2,  "description": "Coffee shop",       "time_of_day": "morning" },
+      { "id": "t4",  "category": "food",          "amount": 4.9,  "description": "Vending machine",   "time_of_day": "afternoon"},
+      { "id": "t5",  "category": "entertainment", "amount": 2.99, "description": "App purchase",      "time_of_day": "night"   },
+      { "id": "t6",  "category": "entertainment", "amount": 1.99, "description": "App purchase",      "time_of_day": "night"   },
+      { "id": "t7",  "category": "entertainment", "amount": 0.99, "description": "In-app purchase",   "time_of_day": "night"   },
+      { "id": "t8",  "category": "food",          "amount": 6.5,  "description": "Late-night snack",  "time_of_day": "night"   },
+      { "id": "t9",  "category": "transport",     "amount": 3.5,  "description": "Parking meter",     "time_of_day": "afternoon"},
+      { "id": "t10", "category": "food",          "amount": 4.2,  "description": "Coffee shop",       "time_of_day": "morning" }
+    ]
   },
 
   "behavior_analysis_medium": {
-    "transactions": [
-      {"amount": 400, "category": "food", "time": "23:10"},
-      {"amount": 500, "category": "food", "time": "23:50"},
-      {"amount": 600, "category": "food", "time": "21:30"}
-    ],
+    "goal": {
+      "objective": "Analyse spending patterns by time-of-day and category to surface actionable behavioural insights.",
+      "target_savings": 120,
+      "difficulty": "medium"
+    },
     "subscriptions": [
-      {"name": "Spotify", "used": true, "cost": 119}
+      { "name": "Gym",        "amount": 30, "used": false },
+      { "name": "Netflix",    "amount": 15, "used": true  },
+      { "name": "MealKit",    "amount": 60, "used": false }
     ],
-    "goal": null
+    "transactions": [
+      { "id": "t1", "category": "food",          "amount": 95,  "description": "Restaurant dinner",      "time_of_day": "night"    },
+      { "id": "t2", "category": "food",          "amount": 78,  "description": "Late-night takeaway",    "time_of_day": "night"    },
+      { "id": "t3", "category": "food",          "amount": 45,  "description": "Lunch",                  "time_of_day": "afternoon"},
+      { "id": "t4", "category": "entertainment", "amount": 55,  "description": "Bar tab",                "time_of_day": "night"    },
+      { "id": "t5", "category": "transport",     "amount": 40,  "description": "Late Uber",              "time_of_day": "night"    },
+      { "id": "t6", "category": "food",          "amount": 250, "description": "Weekly groceries",       "time_of_day": "morning"  },
+      { "id": "t7", "category": "shopping",      "amount": 130, "description": "Impulse online shopping","time_of_day": "night"    }
+    ]
   },
 
   "weekend_spending_medium": {
-    "transactions": [
-      {"amount": 1500, "category": "entertainment", "time": "Saturday 20:00"},
-      {"amount": 1200, "category": "food", "time": "Sunday 21:00"}
+    "goal": {
+      "objective": "Detect weekend overspending spikes vs weekday baseline and recommend reductions.",
+      "target_savings": 150,
+      "difficulty": "medium"
+    },
+    "subscriptions": [
+      { "name": "Spotify",    "amount": 10, "used": true  },
+      { "name": "GymPremium", "amount": 50, "used": false },
+      { "name": "StreamingX", "amount": 18, "used": false }
     ],
-    "subscriptions": [],
-    "goal": null
+    "transactions": [
+      { "id": "t1", "category": "food",          "amount": 25,  "description": "Mon lunch",              "time_of_day": "afternoon", "date": "monday"   },
+      { "id": "t2", "category": "food",          "amount": 30,  "description": "Tue lunch",              "time_of_day": "afternoon", "date": "tuesday"  },
+      { "id": "t3", "category": "entertainment", "amount": 150, "description": "Sat night out",          "time_of_day": "night",     "date": "saturday" },
+      { "id": "t4", "category": "food",          "amount": 120, "description": "Sat restaurant",         "time_of_day": "evening",   "date": "saturday" },
+      { "id": "t5", "category": "shopping",      "amount": 200, "description": "Sun online shopping",    "time_of_day": "afternoon", "date": "sunday"   },
+      { "id": "t6", "category": "transport",     "amount": 60,  "description": "Sat/Sun Ubers",          "time_of_day": "night",     "date": "saturday" },
+      { "id": "t7", "category": "food",          "amount": 28,  "description": "Wed dinner",             "time_of_day": "evening",   "date": "wednesday"}
+    ]
   },
 
   "subscription_overlap_medium": {
-    "transactions": [],
+    "goal": {
+      "objective": "Find overlapping subscriptions providing the same service and consolidate.",
+      "target_savings": 80,
+      "difficulty": "medium"
+    },
     "subscriptions": [
-      {"name": "Netflix", "used": true, "cost": 499},
-      {"name": "Amazon Prime", "used": true, "cost": 1499}
+      { "name": "Netflix",     "amount": 15, "used": true,  "overlap_with": "DisneyPlus"  },
+      { "name": "DisneyPlus",  "amount": 14, "used": false, "overlap_with": "Netflix"     },
+      { "name": "HBOMax",      "amount": 16, "used": false, "overlap_with": "Netflix"     },
+      { "name": "Spotify",     "amount": 10, "used": true,  "overlap_with": "AppleMusic"  },
+      { "name": "AppleMusic",  "amount": 11, "used": false, "overlap_with": "Spotify"     },
+      { "name": "iCloud",      "amount": 3,  "used": true,  "overlap_with": null          }
     ],
-    "goal": null
+    "transactions": [
+      { "id": "t1", "category": "entertainment", "amount": 56,  "description": "Streaming services",  "time_of_day": "evening" },
+      { "id": "t2", "category": "food",          "amount": 180, "description": "Groceries",           "time_of_day": "morning" },
+      { "id": "t3", "category": "transport",     "amount": 90,  "description": "Transport",           "time_of_day": "morning" }
+    ]
   },
 
   "goal_optimization_hard": {
-    "transactions": [
-      {"amount": 500, "category": "food", "time": "22:00"},
-      {"amount": 2000, "category": "shopping", "time": "18:00"}
-    ],
-    "subscriptions": [
-      {"name": "Netflix", "used": true, "cost": 499},
-      {"name": "Gym", "used": false, "cost": 999}
-    ],
     "goal": {
-      "target": 10000,
-      "months": 2
-    }
+      "objective": "Allocate budget reductions across categories to hit a £500 monthly savings target without cutting essentials.",
+      "target_savings": 500,
+      "difficulty": "hard",
+      "constraints": ["keep utilities", "keep transport below 20% cut"]
+    },
+    "subscriptions": [
+      { "name": "Gym",         "amount": 40,  "used": false },
+      { "name": "MagazineX",   "amount": 12,  "used": false },
+      { "name": "CloudBackup", "amount": 8,   "used": false },
+      { "name": "Netflix",     "amount": 15,  "used": true  },
+      { "name": "StreamingPro","amount": 22,  "used": false }
+    ],
+    "transactions": [
+      { "id": "t1", "category": "food",          "amount": 650, "description": "Dining & groceries",  "time_of_day": "various" },
+      { "id": "t2", "category": "shopping",      "amount": 420, "description": "Clothing & misc",     "time_of_day": "various" },
+      { "id": "t3", "category": "entertainment", "amount": 280, "description": "Nights out",          "time_of_day": "night"   },
+      { "id": "t4", "category": "transport",     "amount": 200, "description": "Rides & fuel",        "time_of_day": "various" },
+      { "id": "t5", "category": "utilities",     "amount": 150, "description": "Bills",               "time_of_day": "morning" },
+      { "id": "t6", "category": "health",        "amount": 90,  "description": "Pharmacy & gym",      "time_of_day": "morning" }
+    ]
   },
 
   "tight_budget_hard": {
-    "transactions": [
-      {"amount": 3000, "category": "rent", "time": "1st"},
-      {"amount": 1500, "category": "food", "time": "daily"},
-      {"amount": 800, "category": "transport", "time": "weekly"}
-    ],
-    "subscriptions": [
-      {"name": "Spotify", "used": true, "cost": 119},
-      {"name": "Gym", "used": false, "cost": 999}
-    ],
     "goal": {
-      "target": 5000,
-      "months": 1
-    }
+      "objective": "User is £200 over budget this month. Find cuts that maintain quality of life.",
+      "target_savings": 200,
+      "difficulty": "hard",
+      "constraints": ["cannot cut health", "rent is fixed"]
+    },
+    "subscriptions": [
+      { "name": "GymPremium",  "amount": 55,  "used": false },
+      { "name": "StreamingX",  "amount": 18,  "used": false },
+      { "name": "FoodBox",     "amount": 45,  "used": false },
+      { "name": "Audible",     "amount": 8,   "used": true  }
+    ],
+    "transactions": [
+      { "id": "t1", "category": "food",          "amount": 380, "description": "Food & dining",       "time_of_day": "various" },
+      { "id": "t2", "category": "entertainment", "amount": 210, "description": "Entertainment",       "time_of_day": "night"   },
+      { "id": "t3", "category": "shopping",      "amount": 175, "description": "Non-essentials",      "time_of_day": "various" },
+      { "id": "t4", "category": "health",        "amount": 100, "description": "Healthcare",          "time_of_day": "morning" },
+      { "id": "t5", "category": "transport",     "amount": 130, "description": "Transport",           "time_of_day": "various" },
+      { "id": "t6", "category": "utilities",     "amount": 120, "description": "Utilities & rent",    "time_of_day": "morning" }
+    ]
   },
 
   "multi_goal_hard": {
-    "transactions": [
-      {"amount": 1000, "category": "food", "time": "daily"},
-      {"amount": 3000, "category": "shopping", "time": "weekend"}
-    ],
-    "subscriptions": [
-      {"name": "Netflix", "used": true, "cost": 499},
-      {"name": "Gym", "used": false, "cost": 999}
-    ],
     "goal": {
-      "target": 15000,
-      "months": 3
-    }
+      "objective": "Optimise for three simultaneous goals: build £1000 emergency fund, reduce debt payments, and cut carbon footprint spending.",
+      "target_savings": 400,
+      "difficulty": "hard",
+      "sub_goals": ["emergency_fund", "debt_reduction", "carbon_reduction"]
+    },
+    "subscriptions": [
+      { "name": "CarWash",     "amount": 20,  "used": false },
+      { "name": "FuelRewards", "amount": 12,  "used": false },
+      { "name": "Netflix",     "amount": 15,  "used": true  },
+      { "name": "GymBasic",    "amount": 25,  "used": true  }
+    ],
+    "transactions": [
+      { "id": "t1", "category": "transport",     "amount": 280, "description": "Fuel & parking",      "time_of_day": "various" },
+      { "id": "t2", "category": "food",          "amount": 400, "description": "Food & drink",        "time_of_day": "various" },
+      { "id": "t3", "category": "debt",          "amount": 350, "description": "Credit card payment", "time_of_day": "morning" },
+      { "id": "t4", "category": "entertainment", "amount": 160, "description": "Entertainment",       "time_of_day": "night"   },
+      { "id": "t5", "category": "shopping",      "amount": 240, "description": "Clothes & gadgets",   "time_of_day": "various" },
+      { "id": "t6", "category": "utilities",     "amount": 110, "description": "Energy bills",        "time_of_day": "morning" }
+    ]
   }
 }

@@ -1,221 +1,125 @@
-# Intelligent Financial Leak Detection Environment (OpenEnv)
+# 💸 Financial Leak Detection Environment
 
-## Problem
+An **OpenEnv-compliant** RL environment for evaluating LLM-based personal finance agents.
 
-Most people don’t truly understand where their money goes.
+An agent analyses a user's monthly transactions and subscriptions to detect money leaks, identify behavioural patterns, and optimise toward savings goals — with dense per-step rewards and 9 tasks across three difficulty levels.
 
-* Hidden subscriptions silently drain money
-* Impulse spending (late-night orders, weekend spikes)
-* No visibility into behavioral patterns
-* No actionable plan to achieve savings goals
+---
 
-Existing finance apps only **track expenses** — they don’t **analyze, predict, or guide decisions**.
+## Project Structure
 
+```
+financial-leak-env/
+├── api/
+│   ├── __init__.py
+│   └── app.py              # FastAPI server (OpenEnv REST API)
+├── env/
+│   ├── __init__.py
+│   ├── financial_env.py    # Core environment (reset/step/state/close)
+│   ├── models.py           # Observation, Action, StepResult (Pydantic)
+│   ├── reward.py           # Dense reward function
+│   └── graders.py          # Per-task deterministic graders (9 tasks)
+├── data/
+│   └── tasks.json          # Task definitions with realistic financial data
+├── inference.py            # Baseline LLM agent
+├── openenv.yaml            # OpenEnv spec metadata
+├── Dockerfile
+├── requirements.txt
+└── README.md
+```
 
-## Our Solution
+---
 
-We built an **AI-powered Financial Decision Environment** using OpenEnv that:
+## Quick Start
 
-* Detects financial leaks
-* Understands user behavior
-* Predicts future spending
-* Guides users toward savings goals
+```bash
+pip install -r requirements.txt
 
-This is not a static tool — it is a **multi-step learning environment** where an AI agent continuously improves financial decisions over time.
+# Start the API server
+uvicorn api.app:app --host 0.0.0.0 --port 7860
 
+# Run the baseline agent
+HF_TOKEN=your_token python inference.py
+```
 
+---
 
-## Environment Overview
+## API Endpoints
 
-### Interaction Loop
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET`  | `/` | Health check — returns `{"status": "ok"}` |
+| `POST` | `/reset?task_id=<id>` | Start new episode, returns `Observation` |
+| `POST` | `/step` | Send `Action`, receive `StepResult` |
+| `GET`  | `/state` | Inspect raw task state (debug) |
 
-1. Agent observes financial data
-2. Agent takes actions (optimize spending)
-3. Environment updates state
-4. Reward + task score returned
-5. Loop continues
+---
 
+## Tasks (9 total)
 
+| Task ID | Difficulty | Objective |
+|---------|-----------|-----------|
+| `leak_detection_easy` | Easy | Cancel unused subscriptions |
+| `duplicate_charge_easy` | Easy | Detect duplicate charges |
+| `micro_spending_easy` | Easy | Identify micro-transaction drain |
+| `behavior_analysis_medium` | Medium | Surface night/impulse spending patterns |
+| `weekend_spending_medium` | Medium | Detect weekend vs weekday spending spikes |
+| `subscription_overlap_medium` | Medium | Consolidate overlapping subscriptions |
+| `goal_optimization_hard` | Hard | Hit £500 savings target across categories |
+| `tight_budget_hard` | Hard | Save £200 without violating constraints |
+| `multi_goal_hard` | Hard | Optimise for 3 simultaneous financial goals |
 
-## Observation Space
+---
 
-Each step provides structured financial data:
+## Reward Design (Dense — signal every step)
 
-* **Transactions** (amount, category, time)
-* **Subscriptions** (usage, cost)
-* **Spending Summary**
-* **User Goal**
-* **Time progression (month)**
+| Component | Value | Condition |
+|-----------|-------|-----------|
+| Leak detection | +0.30 per sub | Cancel an unused subscription |
+| Behaviour insight | +0.20 | Mention night/impulsive spending |
+| Reduction effort | +0.20 (max) | Proportional to category cuts |
+| Planning bonus | +0.10 | Forward savings plan in insights |
+| Wrong cancellation | −0.20 per sub | Cancel a subscription that is used |
+| Invalid fraction | −0.10 | reduction value > 1.0 |
 
-
+---
 
 ## Action Space
 
-The agent can:
-
-* Cancel unnecessary subscriptions
-* Reduce spending in categories
-* Generate behavioral insights
-
-Example:
-
 ```json
 {
-  "cancel_subscriptions": ["Gym"],
-  "reduce_categories": {"food": 0.3},
-  "insights": ["Reduce late night spending"]
+  "cancel_subscriptions": ["Gym", "MagazineX"],
+  "reduce_categories":    {"food": 0.20, "entertainment": 0.25},
+  "insights":             ["Late-night food spend is 40% above average — set a cut-off time."]
 }
 ```
 
+---
 
+## Docker
 
-## Reward Function
+```bash
+docker build -t financial-leak-env .
+docker run -p 7860:7860 financial-leak-env
+```
 
-The reward is **dense and meaningful**, capturing real-world financial reasoning:
+---
 
-* ✅ Reward for detecting unused subscriptions
-* ✅ Reward for identifying behavior patterns
-* ✅ Reward for reducing spending
-* ❌ Penalty for removing useful services
+## Environment Variables
 
-Encourages **progressive improvement**, not just final success.
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `HF_TOKEN` | Yes | — | Hugging Face / API key |
+| `API_BASE_URL` | No | `https://api.openai.com/v1` | LLM endpoint |
+| `MODEL_NAME` | No | `gpt-4.1-mini` | Model identifier |
 
-
-
-## Task Design (9 Tasks)
-
-We designed **multi-difficulty tasks** to simulate real-world complexity:
-
-### Easy (Basic Leak Detection)
-
-* `leak_detection_easy`
-* `duplicate_charge_easy`
-* `micro_spending_easy`
-
-### Medium (Behavior Understanding)
-
-* `behavior_analysis_medium`
-* `weekend_spending_medium`
-* `subscription_overlap_medium`
-
-### Hard (Optimization & Planning)
-
-* `goal_optimization_hard`
-* `tight_budget_hard`
-* `multi_goal_hard`
-
-
-
-## Graders (Strict Scoring)
-
-Each task has a **deterministic grader**:
-
-* Score range: **(0, 1)** (strictly enforced)
-* Evaluates:
-
-  * correctness of actions
-  * quality of insights
-  * optimization effectiveness
-
-Ensures fair and consistent evaluation.
-
-
-
-## Baseline Agent
-
-We provide a **deterministic baseline agent**:
-
-* Uses OpenAI client (as required)
-* Falls back safely if API fails
-* Produces reproducible results
-* Logs in strict evaluation format
-
-
+---
 
 ## Example Output
 
 ```
-[START] task=leak_detection_easy env=financial_leak_env model=gpt-4o-mini
-[STEP] step=1 action={...} reward=0.80 done=false error=api_error
-[STEP] step=2 action={...} reward=0.80 done=false error=api_error
+[START] task=leak_detection_easy env=financial_leak_env model=gpt-4.1-mini
+[STEP] step=1 action={"cancel_subscriptions":["Gym","MagazineX"],...} reward=0.80 done=false error=null
+[STEP] step=2 action={...} reward=0.80 done=false error=null
 [END] success=true steps=5 score=0.990 rewards=0.80,0.80,0.80,0.80,0.80
 ```
-
-
-
-## Running Locally
-
-### 1️⃣ Build Docker Image
-
-```bash
-docker build -t financial-env .
-```
-
-### 2️⃣ Run Container
-
-```bash
-docker run -p 7860:7860 financial-env
-```
-
-### 3️⃣ Open API Docs
-
-```
-http://localhost:7860/docs
-```
-
-
-
-## Run Inference
-
-```bash
-python inference.py
-```
-
-
-
-## Deployment
-
-Deployed using **Hugging Face Spaces (Docker)**
-
-* Fully containerized
-* OpenEnv compliant
-* Ready for automated evaluation
-
-
-
-## OpenEnv Compliance
-
-* ✔ Typed Observation / Action models
-* ✔ `step()`, `reset()`, `state()` implemented
-* ✔ `openenv.yaml` defined
-* ✔ 3+ tasks with graders
-* ✔ Dense reward function
-* ✔ Baseline inference script
-* ✔ Dockerized + deployable
-
-
-
-## Why This Project Stands Out
-
-* Real-world financial intelligence (not a toy problem)
-* Multi-step learning environment
-* Behavior-aware decision making
-* Explainable outputs (insights + plans)
-* Strong reward shaping and grading system
-
-
-
-## Future Improvements
-
-* Personalized RL-based optimization
-* Dynamic pricing suggestions
-* Real-time transaction integration
-* Multi-user collaborative insights
-
-
-
-## Author
-
-Built as part of an OpenEnv challenge to design realistic AI environments.
-
-

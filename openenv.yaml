@@ -1,56 +1,64 @@
 name: financial_leak_env
+version: "1.0.0"
 description: >
-  An AI-powered financial decision environment that detects spending leaks,
-  analyzes behavioral patterns, predicts future expenses, and optimizes savings.
-
-version: 1.0
+  An OpenEnv environment that simulates real-world personal finance decisions.
+  An LLM agent analyses transactions to detect hidden money leaks (unused
+  subscriptions, duplicate charges, micro-spending), understands behavioural
+  trends (night/weekend overspending), and optimises toward explicit savings
+  goals. Supports multi-step interaction with dense per-step rewards.
 
 entry_point: api.app:app
 
+endpoints:
+  reset: POST /reset
+  step:  POST /step
+  state: GET  /state
+
+observation_type: env.models.Observation
+action_type:      env.models.Action
+
+max_steps: 5
+reward_range: [0.0, 1.0]
+
 tasks:
   - id: leak_detection_easy
-    description: Detect unused subscriptions and basic spending leaks
+    difficulty: easy
+    description: "Cancel unused subscriptions to stop money leaks."
+
   - id: duplicate_charge_easy
-    description: Identify duplicate transactions
+    difficulty: easy
+    description: "Detect and flag duplicate or near-duplicate charges."
+
   - id: micro_spending_easy
-    description: Detect excessive small repeated expenses
+    difficulty: easy
+    description: "Identify micro-transaction drain across many small purchases."
 
   - id: behavior_analysis_medium
-    description: Identify behavioral spending patterns
+    difficulty: medium
+    description: "Analyse spending by time-of-day to surface behavioural insights."
+
   - id: weekend_spending_medium
-    description: Detect weekend-based overspending
+    difficulty: medium
+    description: "Detect weekend overspending spikes vs weekday baseline."
+
   - id: subscription_overlap_medium
-    description: Identify redundant subscriptions
+    difficulty: medium
+    description: "Find overlapping subscriptions providing the same service."
 
   - id: goal_optimization_hard
-    description: Optimize spending to meet savings goal
+    difficulty: hard
+    description: "Allocate budget reductions to hit a £500 monthly savings target."
+
   - id: tight_budget_hard
-    description: Manage spending under tight constraints
+    difficulty: hard
+    description: "Save £200 without violating constraints (health, rent)."
+
   - id: multi_goal_hard
-    description: Optimize across multiple financial goals
+    difficulty: hard
+    description: "Optimise for emergency fund, debt reduction, and carbon reduction simultaneously."
 
-observation_space:
-  type: object
-  properties:
-    transactions:
-      type: array
-    subscriptions:
-      type: array
-    spending_summary:
-      type: object
-    user_goal:
-      type: object
-    current_month:
-      type: integer
+grader_module: env.graders
+score_range: [0.0, 1.0]
 
-action_space:
-  type: object
-  properties:
-    cancel_subscriptions:
-      type: array
-    reduce_categories:
-      type: object
-    insights:
-      type: array
-
-reward_range: [0.0, 1.0]
+runtime: python
+entrypoint: "uvicorn api.app:app --host 0.0.0.0 --port 7860"

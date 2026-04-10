@@ -1,87 +1,90 @@
-from fastapi import FastAPI
+"""
+
+
+Endpoints
+─────────
+  GET  /        — health check (validator pings this + /reset)
+  POST /reset   — start new episode, returns Observation
+  POST /step    — send Action, receive StepResult
+  GET  /state   — inspect raw task state (debug)
+"""
+
+from fastapi import FastAPI, HTTPException, Query
 from typing import Optional
-from env.financial_env import FinancialLeakEnv
-from env.models import Action
 
-app = FastAPI()
+from env.financial_env import (
+    FinancialLeakEnv,
+    TaskNotFoundError,
+    EnvironmentNotResetError,
+)
+from env.models import Action, Observation, StepResult
 
-# Global environment instance
-env_instance = None
+app = FastAPI(
+    title="Financial Leak Detection Environment",
+    description=(
+        "OpenEnv-compliant API for evaluating LLM-based personal finance agents. "
+        "Detects subscription leaks, duplicate charges, and spending pattern issues."
+    ),
+    version="1.0.0",
+)
+
+_env: Optional[FinancialLeakEnv] = None
+_DEFAULT_TASK = "leak_detection_easy"
 
 
-@app.get("/")
-def home():
-    return {"message": "Financial Leak Detection Environment is running"}
+# ── Health check ──────────────────────────────────────────────────────────
+
+@app.get("/", tags=["meta"])
+def health():
+   
+    return {"status": "ok", "env": "financial_leak_env", "version": "1.0.0"}
 
 
-# ✅ RESET ENDPOINT (SAFE)
-@app.post("/reset")
-def reset(task_id: Optional[str] = None):
-    global env_instance
+# ── Reset ─────────────────────────────────────────────────────────────────
 
-    # default task if not provided
-    if task_id is None:
-        task_id = "leak_detection_easy"
-
+@app.post("/reset", response_model=Observation, tags=["env"])
+def reset(task_id: str = Query(default=_DEFAULT_TASK)):
+    
+    global _env
+    if _env is not None:
+        _env.close()
     try:
-        env_instance = FinancialLeakEnv(task_id)
-        obs = env_instance.reset()
-        return obs
-
-    except Exception as e:
-        return {
-            "error": "reset_failed",
-            "message": str(e)
-        }
+        _env = FinancialLeakEnv(task_id)
+        return _env.reset()
+    except TaskNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"reset_failed: {exc}")
 
 
-# ✅ STEP ENDPOINT (SAFE)
-@app.post("/step")
+# ── Step ──────────────────────────────────────────────────────────────────
+
+@app.post("/step", response_model=StepResult, tags=["env"])
 def step(action: Optional[Action] = None):
-    global env_instance
-
-    # if reset not called yet → auto reset
-    if env_instance is None:
-        env_instance = FinancialLeakEnv("leak_detection_easy")
-        env_instance.reset()
-
-    # default action if none provided
+    
+    global _env
+    if _env is None:
+        _env = FinancialLeakEnv(_DEFAULT_TASK)
+        _env.reset()
     if action is None:
-        action = Action(
-            cancel_subscriptions=[],
-            reduce_categories={},
-            insights=[]
-        )
-
+        action = Action()
     try:
-        obs, reward, done, info = env_instance.step(action)
-
-        return {
-            "observation": obs,
-            "reward": reward,
-            "done": done,
-            "info": info
-        }
-
-    except Exception as e:
-        return {
-            "error": "step_failed",
-            "message": str(e)
-        }
+        obs, reward, done, info = _env.step(action)
+        return StepResult(observation=obs, reward=reward, done=done, info=info)
+    except EnvironmentNotResetError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"step_failed: {exc}")
 
 
-# ✅ STATE ENDPOINT (OPTIONAL BUT GOOD)
-@app.get("/state")
+# ── State ─────────────────────────────────────────────────────────────────
+
+@app.get("/state", tags=["env"])
 def state():
-    global env_instance
-
-    if env_instance is None:
-        return {"state": None}
-
+   
+    if _env is None:
+        return {"state": None, "hint": "Call /reset first."}
     try:
-        return env_instance.state()
-    except Exception as e:
-        return {
-            "error": "state_failed",
-            "message": str(e)
-        }
+        return {"state": _env.state()}
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"state_failed: {exc}")
