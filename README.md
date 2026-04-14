@@ -12,7 +12,7 @@ An agent analyses a user's monthly transactions and subscriptions to detect mone
 financial-leak-env/
 ├── api/
 │   ├── __init__.py
-│   └── app.py              # FastAPI server (OpenEnv REST API)
+│   └── app.py              # FastAPI server (OpenEnv REST Api)
 ├── env/
 │   ├── __init__.py
 │   ├── financial_env.py    # Core environment (reset/step/state/close)
